@@ -336,17 +336,21 @@ def is_tree(matrix, x, y):
 
 lines = input_string.strip().splitlines()
 matrix_width = len(lines[0])
-current_X = 0
-current_y = 0
-collision_count = 0
-for line in lines:
-    current_X += 3
-    current_y += 1
-    if current_y > len(lines) - 1:
-        break
-    if is_tree(lines, current_X, current_y):
-        collision_count += 1
+steps = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
+collision_product = 1
+for step in steps:
+    current_X = 0
+    current_y = 0
+    collision_count = 0
+    for line in lines:
+        current_X += step[0]
+        current_y += step[1]
+        if current_y > len(lines) - 1:
+            break
+        if is_tree(lines, current_X, current_y):
+            collision_count += 1
+    "{}-{}: {}".format(step[0], step[1], collision_count)
+    collision_product *= collision_count
 
-
-print(collision_count)
+print(collision_product)
 
