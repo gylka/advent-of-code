@@ -1,2 +1,1 @@
-# advent-of-code
-Advent of Code tasks solution
+Just solving tasks from (Advent of Code)[https://adventofcode.com/] and learning Python for fun
