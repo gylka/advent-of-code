@@ -1136,6 +1136,7 @@ cid:209 hcl:#efcc98 byr:2001
 
 possible_fields = {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"}
 required_fields = {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
+eye_colors = {"amb", "blu", "brn", "gry", "grn", "hzl", "oth"}
 
 
 def parse_fields(input_line):
@@ -1146,8 +1147,42 @@ def parse_fields(input_line):
         key = key_value[0]
         if key not in possible_fields:
             raise Exception(f"Invalid key: '{key}'")
-        result.add(key)
+        if validate_value(key, key_value[1].strip()):
+            result.add(key)
     return result
+
+
+def is_4_digit_number_between(s, lower_limit, upper_limit):
+    return re.fullmatch(r"\d{4}", s) is not None\
+           and lower_limit <= int(s) <= upper_limit
+
+
+def validate_value(key, value):
+    if key == "byr":
+        return is_4_digit_number_between(value, 1920, 2002)
+    elif key == "iyr":
+        return is_4_digit_number_between(value, 2010, 2020)
+    elif key == "eyr":
+        return is_4_digit_number_between(value, 2020, 2030)
+    elif key == "hgt":
+        match = re.fullmatch(r"(\d+)(cm|in)", value)
+        if match is None:
+            return False
+        if match.group(2) == 'cm':
+            return 150 <= int(match[1]) <= 193
+        if match.group(2) == 'in':
+            return 59 <= int(match[1]) <= 76
+        raise Exception("Should not be here")
+    elif key == "hcl":
+        return re.fullmatch(r"#((\d|[a-f]){6})", value) is not None
+    elif key == "ecl":
+        return value in eye_colors
+    elif key == "pid":
+        return re.fullmatch(r"\d{9}", value) is not None
+    elif key == "cid":
+        return True
+    else:
+        raise Exception(f"Unknown key: '{key}'")
 
 
 lines = input_string.strip().splitlines()
