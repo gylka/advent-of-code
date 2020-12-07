@@ -826,6 +826,13 @@ def seat_number(s):
 lines = input_string\
     .strip()\
     .splitlines()
-lines.sort(key=seat_number)
+seats = []
+for line in lines:
+    seats.append(seat_number(line))
+seats.sort()
 
-print(seat_number(lines[-1]))
+prev = 0
+for current in seats:
+    if current == prev + 2:
+        print(current - 1)
+    prev = current
