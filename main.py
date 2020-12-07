@@ -2095,25 +2095,24 @@ zwrpc
 """
 
 
-def question_count(group_string):
-    result = set()
-    for char in group_string:
-        result.add(char)
-    return len(result)
-
-
 lines = input_string \
     .strip() \
     .splitlines()
 lines.append("")
 
-group = ''
+is_new_group = True
+group_set = set()
 total = 0
 for line in lines:
     if line == "":
-        total += question_count(group)
-        group = ''
+        total += len(group_set)
+        is_new_group = True
+        group_set = set()
         continue
-    group += line
+    if is_new_group:
+        group_set = set(list(line))
+    else:
+        group_set = group_set.intersection(list(line))
+    is_new_group = False
 
 print(total)
